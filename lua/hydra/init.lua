@@ -389,7 +389,9 @@ function Hydra:_setup_pink_hydra()
             self.hint:close()
             self.options:restore()
             vim.cmd 'echo'
-            _G.Hydra = nil
+            if _G.Hydra == self then
+               _G.Hydra = nil
+            end
          end
       }
    }

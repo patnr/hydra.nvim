@@ -153,8 +153,8 @@ function Layer:initialize(input)
             function() show_disable_message('wo') end
          )
 
-      for _, fun in pairs(self.config.on_exit) do
-         setfenv(fun, env)
+      for _, fun in ipairs(self.config.on_exit) do
+         if fun then setfenv(fun, env) end
       end
    end
 
@@ -260,8 +260,8 @@ function Layer:activate()
    self.active = true
 
    if self.config.on_enter then
-      for _, fun in pairs(self.config.on_enter) do
-         fun()
+      for i, fun in ipairs(self.config.on_enter) do
+         if fun then fun() end
       end
    end
 
@@ -291,8 +291,8 @@ function Layer:exit()
    end
 
    if self.config.on_exit then
-      for _, fun in pairs(self.config.on_exit) do
-         fun()
+      for _, fun in ipairs(self.config.on_exit) do
+         if fun then fun() end
       end
    end
 
