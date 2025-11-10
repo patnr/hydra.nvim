@@ -108,6 +108,7 @@ function Layer:initialize(input)
       )
 
       local env = util.deepcopy(getfenv()) --[[@as table]]
+      env._G = _G  -- Ensure functions have access to the real global table
       env.vim.o  = self.options.o
       env.vim.go = self.options.go
       env.vim.bo = self.options.bo
@@ -126,6 +127,7 @@ function Layer:initialize(input)
          end
 
          local env = util.deepcopy(getfenv())
+         env._G = _G  -- Ensure functions have access to the real global table
          env.vim.o  = self.options:make_meta_accessor(
             function(opt)
                return api.nvim_get_option_value(opt, {})
