@@ -364,6 +364,32 @@ end
 
 function Hydra:_setup_pink_hydra()
    local layer = { name = self.name, enter = {}, layer = {}, exit = {} }
+   
+   local on_enter = {
+      function()
+         _G.Hydra = self
+         if self.config.hint and not self.config.hint.hide_on_load then
+            self.hint:show()
+         end
+      end
+   }
+   if self.config.on_enter then
+      table.insert(on_enter, self.config.on_enter)
+   end
+   
+   local on_exit = {}
+   if self.config.on_exit then
+      table.insert(on_exit, self.config.on_exit)
+   end
+   table.insert(on_exit, function()
+      self.hint:close()
+      self.options:restore()
+      vim.cmd 'echo'
+      if _G.Hydra == self then
+         _G.Hydra = nil
+      end
+   end)
+   
    layer.config = {
       debug = self.config.debug,
       desc = self.config.desc,
@@ -374,26 +400,8 @@ function Hydra:_setup_pink_hydra()
          if self.hint.update then self.hint:update() end
          if self.config.on_key then self.config.on_key() end
       end,
-      on_enter = {
-         function()
-            _G.Hydra = self
-            if self.config.hint and not self.config.hint.hide_on_load then
-               self.hint:show()
-            end
-         end,
-         self.config.on_enter
-      },
-      on_exit = {
-         self.config.on_exit,
-         function()
-            self.hint:close()
-            self.options:restore()
-            vim.cmd 'echo'
-            if _G.Hydra == self then
-               _G.Hydra = nil
-            end
-         end
-      }
+      on_enter = on_enter,
+      on_exit = on_exit,
    }
 
    if self.config.invoke_on_body and self.body then
