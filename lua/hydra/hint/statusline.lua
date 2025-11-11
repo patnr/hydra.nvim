@@ -100,6 +100,11 @@ function HintManualStatusLine:_make_statusline()
          vim.list_extend(statusline, {
             hint:sub(last_end + 2, start - 1)
          })
+      else
+         -- Add text before the first head
+         vim.list_extend(statusline, {
+            hint:sub(1, start - 1)
+         })
       end
       local head_key = hint:sub(start + 1, end_)
       vim.list_extend(statusline, {
@@ -110,9 +115,14 @@ function HintManualStatusLine:_make_statusline()
       last_end = end_
    end)
 
-   vim.list_extend(statusline, {
-      hint:sub(last_end + 2)
-   })
+   if last_end then
+      vim.list_extend(statusline, {
+         hint:sub(last_end + 2)
+      })
+   else
+      -- No heads were found, use the entire hint
+      vim.list_extend(statusline, { hint })
+   end
 
    statusline = table.concat(statusline) ---@diagnostic disable-line
    self.statusline = statusline
