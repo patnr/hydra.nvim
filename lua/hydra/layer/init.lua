@@ -414,6 +414,7 @@ function Layer:_save_keymaps(bufnr)
                rhs = map.rhs or '',
                expr = map.expr == 1,
                callback = map.callback,
+               desc = map.desc,
                noremap = map.noremap == 1,
                script = map.script == 1,
                silent = map.silent == 1,
@@ -438,6 +439,7 @@ function Layer:_restore_keymaps()
                   api.nvim_buf_set_keymap(bufnr, mode, lhs, map.rhs, {
                      expr = map.expr,
                      callback = map.callback,
+                     desc = map.desc,
                      noremap = map.noremap,
                      script = map.script,
                      silent = map.silent,
